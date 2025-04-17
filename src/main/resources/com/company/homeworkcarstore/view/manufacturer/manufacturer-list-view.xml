@@ -41,6 +41,7 @@
                     <button id="createButton" action="manufacturersDataGrid.create"/>
                     <button id="editButton" action="manufacturersDataGrid.edit"/>
                     <button id="removeButton" action="manufacturersDataGrid.remove"/>
+                    <button id="calculateCars" text="Calculate cars"/>
                     <simplePagination id="pagination" dataLoader="manufacturersDl"/>
                 </hbox>
                 <dataGrid id="manufacturersDataGrid"

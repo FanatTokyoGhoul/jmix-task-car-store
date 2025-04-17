@@ -1,6 +1,7 @@
 package com.company.homeworkcarstore.view.manufacturer;
 
 import com.company.homeworkcarstore.entity.Manufacturer;
+import com.company.homeworkcarstore.service.CarService;
 import com.company.homeworkcarstore.view.main.MainView;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.HasValueAndElement;
@@ -10,6 +11,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
 import io.jmix.core.validation.group.UiCrossFieldChecks;
 import io.jmix.flowui.component.UiComponentUtils;
+import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.validation.ValidationErrors;
 import io.jmix.flowui.kit.action.ActionPerformedEvent;
 import io.jmix.flowui.kit.component.button.JmixButton;
@@ -18,6 +20,7 @@ import io.jmix.flowui.model.DataContext;
 import io.jmix.flowui.model.InstanceContainer;
 import io.jmix.flowui.model.InstanceLoader;
 import io.jmix.flowui.view.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Route(value = "manufacturers", layout = MainView.class)
 @ViewController(id = "Manufacturer.list")
@@ -46,6 +49,12 @@ public class ManufacturerListView extends StandardListView<Manufacturer> {
 
     @ViewComponent
     private HorizontalLayout detailActions;
+
+    @ViewComponent
+    private DataGrid<Manufacturer> manufacturersDataGrid;
+
+    @Autowired
+    private CarService carService;
 
     @Subscribe
     public void onBeforeShow(final BeforeShowEvent event) {
@@ -124,5 +133,13 @@ public class ManufacturerListView extends StandardListView<Manufacturer> {
 
     private ViewValidation getViewValidation() {
         return getApplicationContext().getBean(ViewValidation.class);
+    }
+
+    @Subscribe(id = "calculateCars", subject = "clickListener")
+    public void onCalculateCarsClick(final ClickEvent<JmixButton> event) {
+        Manufacturer manufacturer = manufacturersDataGrid.getSingleSelectedItem();
+        if (manufacturer != null) {
+            carService.calculateCars(manufacturer);
+        }
     }
 }
